@@ -1,0 +1,5 @@
+will be fixed in 4.5
+
+https://github.com/ezsystems/ezpublish/commit/511794e4abaee52e282fff955e7de4f6b28fef22
+
+http://issues.ez.no/IssueView.php?Id=17668

@@ -1,0 +1,75 @@
+this is just a small doc to make it a bit easier to customize the extension for your needs
+
+About xrowPM: the general idea is that you only have user in your system with a UNIQUE name! Make sure that is the case, else there COULD be some problems ;-)
+
+1) DB Constants:
+================
+
+Table: `xrowforum_pm_messages`:
+
+#read_state 0 = unread
+#read_state 1 = read
+
+Table: `xrowforum_pm_network`:
+
+#state 0 = pending friend
+#state 1 = friend
+#state 2 = block
+
+2) Call Module functions:
+=========================
+
+*Friend add options:
+
+	1) URL:
+		siteaccess/pm/network/0/$userID
+		
+	2) Form
+		<form action={"pm/network"|ezurl()} method="post">
+		<input class="box" name="recipient_name" value="$username" type="hidden">
+		<input class="box" name="action_type" value="0" type="hidden">	
+		<input class="defaultbutton" name="NetworkActionButton" value="block user" type="submit">
+		</form>
+
+	3) Default
+		Useof the default form in siteaccess/pm/network  
+
+* Block add options:
+
+	1) URL
+		siteaccess/pm/network/1/$userID
+
+	2) Form
+		<form action={"pm/network"|ezurl()} method="post">
+		<input class="box" name="recipient_name" value="$username" type="hidden">
+		<input class="box" name="action_type" value="1" type="hidden">	
+		<input class="defaultbutton" name="NetworkActionButton" value="block user" type="submit">
+		</form>
+
+	3) Default
+		Useof the default form in siteaccess/pm/network
+
+* Create PM options:
+
+	1)	URL
+		Direct to user: /pm/create/$userID
+		jump into the create view only:  /pm/create
+	
+	2)	Form
+		<form action={"pm/network"|ezurl()} method="post">
+		<input class="box" name="recipient_name" value="$username" type="hidden">
+		<input class="box" name="action_type" value="1" type="hidden">	
+		<input class="defaultbutton" name="NetworkActionButton" value="block user" type="submit">
+		</form>
+		
+	3)	Default: “new message” link in control_menu
+	
+3) Operators:
+=============
+
+	< no documentation since the operators are easy to read >
+	
+4) Hint:
+========
+
+	- $action_type is NOT the same state as the DB state value | action type value is used like that: "0" = add friend and "1" = block user

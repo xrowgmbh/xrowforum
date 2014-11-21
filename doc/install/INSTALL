@@ -1,0 +1,187 @@
+Installation Manual
+===================
+
+Important Note: This installation Manual is made for a fresh eZ installation, there might occur errors with IDs, identfier, workflows or permissions when you implement it to your custom installation.
+
+I. Filesystem:
+==============
+
+Download the xrowForum extension and unpack it into your extensions folder (ezpublish-root/extension/. )
+
+II. Filesystem-Patches:
+=====================
+
+1) Cookie Patch
+
+NOTE: this will be obsolete when you use eZ version 4.4 or when using a revision greater than rev. '25217'
+      - http://issues.ez.no/IssueView.php?Id=16566
+
+run the patchfile located it extension/xrowforum/doc/install/patch/cookies_patch.patch
+or edit the ezurloperator.php manually and add the new code lines (ezurloperator is located in kernel/common)
+
+2) Logged in User
+
+NOTE: this will be obsolete when you use eZ version 4.5
+		- http://issues.ez.no/IssueView.php?Id=17668
+	
+run the patchfile located it extension/xrowforum/doc/install/patch/017668_logged_in_list_44_regression.diff
+
+III. Activate the Extension:
+===========================
+
+Enable the extension in eZ Publish (settings/override/site.ini.append.php)
+[ExtensionSettings]
+ActiveExtensions[]=xrowforum
+
+additional:
+edit the site.ini.append.php for your siteaccess and add xrowforum as sitedesign or additionalsitedesign
+
+#[DesignSettings]
+#SiteDesign=xrowforum
+or
+#AdditionalSiteDesignList=xrowforum
+
+or use your own design extension and overwrite our new templates so that u dont make changes in the xrowforum extension(recommanded)
+ AND DONT FORGET THE JS / CSS FILES! :-)
+
+IV. Database:
+==============
+
+Forum:
+Add the 3 new required tables to your database which is used by your eZ Publish instance.
+path of the SQL file: extension/xrowforum/doc/install/forum_tables.sql
+
+PM:
+
+Add the 3 new required tables to your database which is used by your eZ Publish instance.
+path of the SQL file: extension/xrowforum/doc/install/pm_tables.sql
+
+Shell command when you navigate to your eZPublish Root:
+
+mysql -u<user> -p<password> -D<database_name> < extension/xrowforum/doc/install/forum_tables.sql
+mysql -u<user> -p<password> -D<database_name> < extension/xrowforum/doc/install/pm_tables.sql
+
+V. Autoloads:
+=============
+
+Run in your shell:
+
+php bin/php/ezpgenerateautoloads.php -e
+
+VI. Cache:
+==========
+
+Clear the Cache
+
+a) php bin/php/ezcache.php --clear-all --purge
+
+or
+
+b) administration interface(backend) => setup => "clear all caches"
+
+or
+
+c) move to eZ Publish root directory and remove the content of var/cache/* and var/ezwebin/cache/*
+rm -Rf var/cache/* 
+rm -Rf var/ezwebin/cache/* 
+
+VII. Setup the Cronjob:
+=======================
+
+# This must be set to the directory where eZ publish is installed.
+EZPUBLISHROOT=/var/www/project
+
+# Location of the PHP Command Line Interface binary.
+PHP=/usr/local/php5/bin/php5
+
+# Executes the runcronjobs.php script every 5minutes
+*/5 * * * * cd $EZPUBLISHROOT && $PHP runcronjobs.php mostuser
+1 2 * * * cd $EZPUBLISHROOT && $PHP runcronjobs.php cleanflags
+
+VIII. Edit the Content Classes:
+===============================
+
+VIII.a) User - Class:
+        1) add a new attribute with the identifier name "birthday" of the datatype "birthday"
+        2) add a new attribute with the identifier name "moderator" of the datatype "object relations"
+       (for more information see the screenshot "user_class.jpg") 
+        
+
+VIII.b) Forum Topic - Class:
+        1) add a new attribute with the identifier name "closed" of the datatype "checkbox"
+        (for more information see the screenshot "forum_topic_class.jpg")
+
+IX. Setting up the workflows:
+=============================
+
+We will need to setup 7 Workflows and some triggers for the extension.
+
+IX.a) Flag Workflow
+        1) create a new workflow of the eventtype: Event/Flag
+        2) create a new workflow of the eventtype: Event/Deflag
+        3) create a new workflow of the eventtype: Event/Multiplexer
+            - limited to the content classes forum reply / forum topic
+            - affected versions: "Publishing new object"
+            - workflow to run is the workflow which was created in #1
+            (for more details see the screenshot "workflow3_part1.jpg")
+            
+IX.b) modified_subnode Timestamp Workflow
+        4) create a new workflow of the eventtype: Event/set Session
+        5) create a new workflow of the eventtype: Event/Multiplexer
+            - limited to the content classes forum reply / forum topic
+            - affected versions: "Updating existing Object"
+            - workflow to run is the workflow which was created in #4
+            (for more details see the screenshot "workflow5.jpg")
+        6) create a new workflow of the eventtype: Event/Update modified TS
+        7) edit the workflow which was created in #3 and ADD a new Event/Multiplexer block
+            - limited to the content classes forum reply / forum topic
+            - affected versions: "Updating existing Object"
+            - workflow to run is the workflow which was created in #6
+            (for more details see the screenshot "workflow3_part2.jpg")
+
+IX.c) set the triggers for the workflows
+        1) content - publish - before: add the workflow from #5
+        2) content - publish - after:  add the workflow from #3
+        3) content - read- before:     add the workflow from #2
+        (for more details see the screenshot "trigger.jpg")
+        
+        
+X. Configuration:
+=================
+
+- Permissions:
+  1) Create a "Moderator" Usergroup
+  2) Create a "Moderator" Role
+  3) Assign the Moderator Role to the Moderator Usergroup
+  4) Edit the Moderator Role and add the Permissions:
+        - "content/edit"    (forum_topic and forum_reply)
+        - "content/remove"  (forum_topic and forum_reply)
+        - "content/move"    (content_move)
+        - "xrowforum/close" (closes and reopens forum topics)
+     Assign a limitation to forum section or forumindex subtree for that role
+     Edit one of your Moderator User and add some forum as related object which he should be able to administrate in future
+     (you created that new "moderator" attribute earlier in step VIII)
+     
+  5) Edit the Member Role and add the Permissions:
+        - "xrowforum/overview" (displays the statistic page)
+        - "xrowforum/create" (allows to reply on forum topics)
+        - "xrowforum/removeflag" (allows to remove ALL flags for a certain user)
+        - "xrowforum/report" (allows to report a rule violation) 
+		- "pm/*" (allows your user to use the whole PM module)
+  
+  6) Edit the Anonymous Usergroup and add "Content - Read - Section (Users)" permissions (required for birthdays)
+  7) additional: give permissions to the moderator role to modify ranks in the backend ("xrowforum/ranks") and permissions to administrate forum via the backend ("xrowforum/settings")
+  
+- go to the backend and click on the "xrowForum" tab then on general settings and fill out the first 5 fields correctly! (ID settings)
+- or navigate to http://"url"/"admin_siteaccess"/xrowforum/settings and fill out the first 5 fields correctly! (ID settings)
+
+
+XI. about the Forumindex Node:
+==============================
+
+- This extension expects a forum tree which looks like: 1) "forumindex node"(no matter which class, suggested: folder) -> 2) forums -> 3) forum -> 4)forum_topic -> 5) forum_reply
+- consider that when you select the forum index node!
+- this extension also delivers a rough forum index template which u are able to activate in your overrides (check xrowforum/settings/siteaccess/eng/override.ini.append.php for that)
+- don't activate that override condition if you don't use a special forumindex node above your forums! but again i recommand to use such a node!
+- this override will activate a template which provides a couple of features, which you will loose if you dont activate it, such as statistic overview or the unflag all areas function
+- look at "hierarchy.jpg" picture for a more visual explanation

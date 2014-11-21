@@ -1,0 +1,12 @@
+@CHARSET "ISO-8859-1";
+
+fieldset
+{
+    margin-bottom: 10px;
+}
+
+fieldset label
+{
+    font-weight: bold;
+    display: inline;
+}

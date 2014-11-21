@@ -1,0 +1,42 @@
+Index: ezurloperator.php
+===================================================================
+--- ezurloperator.php	(revision 23797)
++++ ezurloperator.php	(working copy)
+@@ -40,6 +40,7 @@
+     const HTTP_OPERATOR_TYPE_POST = 1;
+     const HTTP_OPERATOR_TYPE_GET = 2;
+     const HTTP_OPERATOR_TYPE_SESSION = 3;
++    const HTTP_OPERATOR_TYPE_COOKIE = 4;
+ 
+     /*!
+      Initializes the image operator with the operator name $name.
+@@ -725,6 +726,8 @@
+                             $httpType = eZURLOperator::HTTP_OPERATOR_TYPE_GET;
+                         else if ( $httpTypeName == 'session' )
+                             $httpType = eZURLOperator::HTTP_OPERATOR_TYPE_SESSION;
++                        else if ( $httpTypeName == 'cookie' )
++                            $httpType = eZURLOperator::HTTP_OPERATOR_TYPE_COOKIE;
+                         else
+                             $tpl->warning( $operatorName, "Unknown http type '$httpTypeName'" );
+                     }
+@@ -789,6 +792,20 @@
+                                 $tpl->error( $operatorName, "Unknown session variable '$httpName'" );
+                             }
+                         } break;
++                        case eZURLOperator::HTTP_OPERATOR_TYPE_COOKIE:
++                        {
++                            if ( array_key_exists( $httpName, $_COOKIE ) )
++                                $operatorValue = !$checkExistence ? $_COOKIE[$httpName] : true;
++                            else
++                            {
++                                if ( $checkExistence )
++                                {
++                                    $operatorValue = false;
++                                    return;
++                                }
++                                $tpl->error( $operatorName, "Unknown cookie variable '$httpName'" );
++                            }
++                        } break;
+                     }
+                 }
+                 else

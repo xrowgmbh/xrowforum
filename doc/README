@@ -1,0 +1,176 @@
+NOTE: !!!!read the install/INSTALL file for the installation and configuration of the xrowforum extension!!!!
+
+1. Requirements:
+================
+    - This extension is designed for eZ Publish 4.2
+		- and is tested for eZ Publish 4.2, 4.3, 4.4, 4.5
+		- it may run for lower versions also
+    - PHP 5.x
+    - activated JavaScript in your browser!!
+
+2.Feature List(implemented):
+============================
+(these are features which are not delivered by the normal eZPublish Forum)
+
+    1. Notification - Flag System:
+        - the user recieves information by a flagimage and a count about any new unread messages
+        - after reading the new post/thread the flag will be removed
+        - the user can mark all forums as read with one click (remove all flags)
+        - the user can remove the flags for seperate forums or topics ONLY too
+		- cronjob to clean the "xrowforum_notification" table after a certain duration (controlable via backend)
+    
+    2. Backend Forum Adminstration Interface:
+        - Tab 1: Forum Statistics
+            *Information: Board Started, Topic Count, Post Count, Total Count
+            *User: User Count, Currently Online, Online In Past 24Hours, Todays Birthdays, Most User Ever Online at the same time
+            *other Statistics: Topics Per Day, Posts Per Day, Registrations Per Day
+            *TOP Ranks: latest registered User, latest Topics, latest Posts, hottest Topics (by views), hottest Topics (by replies), top activity User(by Comments),top activity User (by Logins) 
+        - Tab 2: Moderator Permissions
+            * select user as moderator for seperate Forums
+        - Tab 3: User Ranks
+            *Option 1: give certain user special ranks
+            *Option 2: give user normal ranks (depending on the post amount of the user)
+        - Tab 4: Forum Settings
+            *here you are able to modify the xrowforum.ini via the backend
+            *you have to select the IDs of some nodes and classes there
+            *you can administrate your forum there, you have the following options:
+                -de/activate Rankingsystem
+                -de/activate WordToImage
+                -when does a topic become a HotTopics
+                -PostsPerPage
+                -TopicsPerPage
+                -PostHistoryLimit
+                -de/activate Signature Image
+                -StatisticLimit
+                -de/activate BB-Codes
+    
+    3. advanced Permissionsystem / Moderator:
+        - user can be assigned to Moderator Group and can be assigned to seperate forums which they are able to administrate then
+        - these users will be displayed as Moderators and have more functions then other members
+        - moderators can move topics/posts without toolbar
+        - moderators can close topics and reopen them with 1 click
+        - permission bugs fixed in templates (edit / sticky)
+        - general delete/edit/move and addtonotification access options changed
+    
+    4. general Templates
+        - general template cleanup, bugfix and improve
+        - all deprecated sections/default things removed and replaced by non deprecated control-/fetch structures
+        - fix template variables and structures changed to dynamic ones (like paginator, offsets, etc..)
+        - post fullview will display fullview of parent(topic)
+        - many bugs fixed!
+        
+    5. BB-editor / BB-Tags
+        - phpBB editor for the frontend made of javascript
+        - gives a list of available BB tags controlled by xrowForum Administration Interface in the backend
+        - adds BB Tags to the textfield which will be automatically parsed by the bbcode2xhtml operator after publish
+        - available BB Tags: strike, bold, italic, underlined, code, quote, list, img, url, font color and font style
+        - offers a list of smilies
+    
+    6. new reply module
+        - creates replies(posts) in the same language as the parent(topic)
+        - speed increase
+        - avoids problems with "object unavailabilty" which appeared in the past on multilingual sites
+        - new template (= code cleanup)
+    
+	7. Private Messaging module
+		- Inbox
+			* search in inbox
+			* new messages special displayed
+			* straight reply function
+			* remove messages
+			* sorting messages
+		- Outbox
+			* search in outbox
+			* new messages special displayed
+			* straight reply function
+			* remove messages
+			* sorting messages
+		- Network Overview
+			* option do add friends and to block user
+			* Friendlist
+			* Blocklist
+			* Friendrequestlist
+		- Create PM
+			* full validation
+			* Editor
+			* jQuery name suggest
+		- View PM
+		- different Operators
+			* Private Message Count (inbox: total/new/old, outbox: total)
+			* Relation Check
+				- is user XX blocked? is user XX a friend?
+				- friendlist
+				- who of my friends is online / offline
+			* Requestcheck
+		- Friend Request "Workflow"
+			- add => accept => is friend => break friendship
+		- Block User
+			- block removable if you are the user whoch actually started blocking the other user
+		- Mail Notification
+			* enable/disable via .ini setting
+			* if enabled then each user can decide if notifications are wanted or not
+				- sends notification on: new PM in inbox, new Friend Request, User accepted the request, User rejected the request
+		- and much more..
+	
+    8. other
+        - user have a new attribute (birthday)
+        - you are able to quote posts and topics (the quoted content will be posted into a new object automatically in quote tags)
+        - forumindex page with more functions and for a better overview
+        - forum full-view has one more column now: "views"(hits) for each topic
+        - edit templates completely rebuilt
+        - sort order in forum full-view of the topics is different now => 2 workflows added to prevent edited posts to jump up when using "subnode_modified" method
+        - new template operator added which can load many operators in a row depending on certain conditions
+        - cronjob for most user ever online at same time added
+        - overflow/width fix for forum content
+        - 5 different status of a topic: old, new, old-hot, new-hot, closed
+        - some CSS fixes (this extension does NOT deliver a proper design ;-] )
+        - ezhttp option "cookie" added as kernel hack (will be added to kernel from eZ in 4.4)
+        - complete german/english translation delivered
+        - proper redirects after publishing/discarding or editing
+		- censoring added to replace bad with good words
+            
+3. Known Issues:
+================
+    - the BBCodeParser doesnt build "www.xxxxx.xx" links correct, you can only use "http://xxxx.xx" or "http://www.xxxx.xx"
+    - do not use template Debug or it will destroy the BB-Tag Editor JavaScript
+    - CSS Bug for IE 7 on post creation page
+
+4. Planned Features:
+====================
+    - smiley Upload and administration of smilies via backend module
+    - Forums with password protection
+    - switch to tinymce editor for the frontend ( http://tinymce.moxiecode.com ) and youtube video implementation
+    - limited signature char length
+    - limited image sizes in signature and content of posts and topics
+    - javascript for enlarging images
+    - stripping quote tags from quoted quotes before publish or find another solution
+
+5. Changelog:
+=============
+    - 08.07.2010:   - released on projects.ez.no
+                    - no changes
+	- 22.04.2011:   - cronjob to clean the "xrowforum_notification" table added
+					- cronjob session renamed to "mostuser"
+	- 01.05.2011:   - eZ 4.5 ready
+				    - new PM Module added
+
+6. the xrowForum extensions also includes:
+==========================================
+
+I.  birthday-datatype:
+    - by georg w. franz
+    - http://projects.ez.no/birthday
+   
+II. BBcode template operator:
+    - by Vathanan Kumarathurai
+    - http://ez.no/developer/contribs/template_plugins/bbcode_template_operator
+    - modified, adjusted and updated to php5
+    
+III. jQuery Shadowbox
+	- http://shadowbox-js.com
+    
+7. Infos / Question / Problems / Feedback / Bugs:
+=================================================
+
+mail: robert@xrow.de
+skype: xrow.robert

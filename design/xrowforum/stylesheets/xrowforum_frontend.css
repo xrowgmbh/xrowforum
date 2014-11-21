@@ -1,0 +1,172 @@
+@CHARSET "ISO-8859-1";
+
+.red_new
+{
+    font-weight: bold!important;
+    color: red!important;
+}
+
+div.content-view-full div.class-forums table.forum td.forum a 
+{
+    background-image: none;
+    padding-left: 0px;
+}
+
+.bullet_item
+{
+	background-image: url(../images/bullet.gif);
+	background-position: 0.2em 0.5em;
+	background-repeat: no-repeat;
+	padding-left: 18px;
+	display: block;
+	font-size: 0.85em;
+}
+
+fieldset 
+{
+    background-image: none!important;
+}
+
+#java_editor .button
+{
+    margin-right: 5px;
+    width: 45px;
+}
+
+#java_editor select
+{
+    margin-right: 5px;
+    
+}
+
+#Topic_Content
+{
+    width: 80%;
+    float: left;
+}
+
+#smiley_box
+{
+    width: 15%;
+    float: right;
+}
+
+.history_block
+{
+    margin-bottom: 10px;
+}
+
+#topic_history
+{
+    margin-top: 20px;
+    max-height: 300px;
+    overflow: auto;
+    width: 95%;
+}
+
+#history_topic
+{
+    border: 1px solid #D4D4D4;
+}
+
+.modified_block
+{
+    margin-top: 80px;
+}
+
+.content_block
+{
+    overflow: auto;
+    width: 450px;
+}
+/* AUTOCOMPLETE */
+
+.ac_results {
+	padding: 0px;
+	border: 1px solid black;
+	background-color: white;
+	overflow: hidden;
+	z-index: 99999;
+}
+
+.ac_results ul li
+{
+	background-image: none;
+}
+
+.ac_results ul {
+	width: 100%;
+	list-style-position: outside;
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.ac_results li {
+	margin: 0px;
+	padding: 2px 5px;
+	cursor: default;
+	display: block;
+	/* 
+	if width will be 100% horizontal scrollbar will apear 
+	when scroll mode will be used
+	*/
+	/*width: 100%;*/
+	font: menu;
+	font-size: 12px;
+	/* 
+	it is very important, if line-height not setted or setted 
+	in relative units scroll will be broken in firefox
+	*/
+	line-height: 16px;
+	overflow: hidden;
+}
+
+.ac_odd {
+	background-color: #DBECF4;
+}
+
+.ac_over {
+	background-color: #75B3D8;
+	color: white;
+}
+
+/* PM SECTION */
+
+#pm_recipient_name
+{
+	width: 20%;
+}
+
+#pm_subject
+{
+	width: 80%;
+}
+
+#pm_content
+{
+    width: 80%;
+    float: left;
+}
+
+.buttonblock form
+{
+	display: inline;
+}
+
+#forum_top_right
+{
+	float: right;
+}
+
+
+#forum_top_left
+{
+	float: left;
+}
+
+.user_state p
+{
+	font-style: italic;
+	font-weight: bold;
+}

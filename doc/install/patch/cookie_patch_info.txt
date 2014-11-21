@@ -1,0 +1,5 @@
+will be Obsolete since 4.4
+
+its Implemented in trunk rev. 25217
+
+http://issues.ez.no/IssueView.php?Id=16566
