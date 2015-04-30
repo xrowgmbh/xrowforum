@@ -154,7 +154,7 @@ else
 						$content = $db->escapeString($content);
 						$db->arrayQuery("INSERT INTO xrowforum_pm_messages (msg_id, sender, recipient, pm_subject, pm_content, send_date, read_state, owner_id) values ( NULL, $user->ContentObjectID, $recipient_obj_id, '$subject', '$content', '$time', 0, $user->ContentObjectID);");
 						$db->arrayQuery("INSERT INTO xrowforum_pm_messages (msg_id, sender, recipient, pm_subject, pm_content, send_date, read_state, owner_id) values ( NULL, $user->ContentObjectID, $recipient_obj_id, '$subject', '$content', '$time', 0, $recipient_obj_id);");
-						$msg_id = mysql_insert_id();
+						$msg_id = $db->lastSerialID();
 						$db->commit();
 						
 						#mail sending
